@@ -1,0 +1,10 @@
+- Locate nearby shop in given locality
+- Secure and limited communication with shopkeeper
+- Verify list with availability, price as well as expiry date
+- Keep track of previous transaction
+- Website with multilingual content
+References
+- https://www.codexworld.com/autocomplete-places-search-box-google-maps-javascript-api/
+- https://www.makestickers.com/cat/436/plain-text-stickers
+- https://www.remove.bg/upload
+- https://www.zomato.com

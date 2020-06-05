@@ -1,0 +1,12 @@
+            .star{
+                width:40px;
+                height: 40px;
+                cursor:pointer;
+            }
+            .inputComment{
+                width:80%;
+                border: 1px solid black;
+                border-left: none;
+                border-top: none;
+                border-right: none;
+            }

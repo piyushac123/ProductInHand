@@ -1,0 +1,184 @@
+/*Disabled*/
+.disabled{
+    pointer-events:none;opacity:0.4;
+}
+
+/*Logo Text and image*/
+.logoImg{
+    height:150px;width:200px;
+}
+.logoText{
+    font-family:'Aclonica';
+    font-variant:small-caps;
+    font-size: 30px;
+    font-weight: bold;
+}
+.sec4, .sec5, .sec6, .btn1{
+    background-color: #eee;
+    border:1px solid #eee;
+    border-radius: 10px;
+}
+
+
+
+/*Footer and Social media icons*/
+.footer-text{
+    font-size: 20px;
+    list-style-type: none;
+    margin-left: -30px;
+    cursor: pointer;
+}
+.fa {
+  padding: 20px;
+  width: 50px;
+    font-size:50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+  font-size:25px;
+}
+
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+    font-size:25px;
+}
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+    font-size:25px;
+}
+
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+    font-size:25px;
+}
+
+/*For Login Dialogue Box*/
+/* Mask for background, by default is not display */
+#mask {
+    display: none;
+    background: #000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    z-index: 10;
+}
+
+/* You can customize to your needs  */
+.login-popup {
+    display: none;
+    float: left;
+    font-size: 1.2em;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99999;
+    box-shadow: 0px 0px 20px #999;
+    /* CSS3 */
+        -moz-box-shadow: 0px 0px 20px #999;
+    /* Firefox */
+        -webkit-box-shadow: 0px 0px 20px #999;
+    /* Safari, Chrome */
+	border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px;
+    /* Firefox */
+        -webkit-border-radius: 3px;
+    /* Safari, Chrome */
+    
+    background-color: white;
+    max-width: 300px;
+    width:auto;
+    padding: 20px;
+}
+
+.btn_close {
+/*    Position the close button*/
+	float: right;
+    margin: -28px -22px 0 0;
+}
+
+
+.button1 {
+    background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
+    background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#dddddd));
+    background: -o-linear-gradient(top, #f3f3f3, #dddddd);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#dddddd');
+    border-color: #000;
+    border-width: 1px;
+    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 6px 4px;
+    margin-top: 10px;
+    font-size: 12px;
+    width: 100px;
+}
+
+.button1:hover {
+    background: #ddd;
+}
+.forgot{
+    color:black;
+}
+.forgot:hover{
+    color:black;
+    text-decoration: none;
+}
+.link2{
+    color: #555;
+    display: inline;
+}
+.link2:hover{
+    color: #555;
+    text-decoration: none;
+}
+.link3{
+    color: black;
+    display: inline;
+}
+.link3:hover{
+    color: black;
+    text-decoration: none;
+    border:none;
+    background-color: white;
+}
+.input1{
+    margin-bottom: 25px;
+    width: 250px; 
+}
+.input2{
+    margin-bottom: 25px;
+    width: 500px;
+}
+.titlelog{
+    margin:auto;
+    color:black;
+    margin-bottom: 25px;
+}
+/*Login End*/
+
+@media screen and (max-width:600px){
+    .input2{
+        margin-bottom: 25px;
+        max-width: 500px;
+        width:100%;
+    }
+}
+

@@ -1,0 +1,4 @@
+Registration(rid,Name,username,email,phone_no,cust_type(C/S),DOB,Password,Address,Landmark,flag)
+Shopkeeper(sid,rid,Shop_name,Shop_photo,Shopkeeper_certificate,Shop_type,rating,opening_time,closing_time,open_days,current_open_status,mode_of_payment,area)
+List_of_Item(lid,rid,sid,Item_name,Item_price,Item_size,Item_quantity,alternative_item,expiry_date,availability,acceptance,otp,commision)
+Feedback(fid,lid,Shop_rating,comment)->only if accepted
