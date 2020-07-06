@@ -1,8 +1,6 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
-$con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
+
 $rid = $_POST['rid'];
 $sql = "select current_open_status,Activation from Shopkeeper where rid=".$rid;
     $result = mysqli_query($con,$sql);
@@ -11,6 +9,8 @@ $sql = "select current_open_status,Activation from Shopkeeper where rid=".$rid;
    }
 if(isset($_POST['btn-off'])){
     $sqlUpdate="UPDATE `Shopkeeper` SET `current_open_status`=1 WHERE rid=".$rid;
+            $result1 = mysqli_query($con,$sqlUpdate);
+    $sqlUpdate="UPDATE `HShopkeeper` SET `current_open_status`=1 WHERE rid=".$rid;
             $result1 = mysqli_query($con,$sqlUpdate);
     ?>
     <script>
@@ -22,6 +22,8 @@ if(isset($_POST['btn-off'])){
     
 if(isset($_POST['btn-on'])){
     $sqlUpdate="UPDATE `Shopkeeper` SET `current_open_status`=0 WHERE rid=".$rid;
+            $result1 = mysqli_query($con,$sqlUpdate);
+    $sqlUpdate="UPDATE `HShopkeeper` SET `current_open_status`=0 WHERE rid=".$rid;
             $result1 = mysqli_query($con,$sqlUpdate);
     ?>
     <script>

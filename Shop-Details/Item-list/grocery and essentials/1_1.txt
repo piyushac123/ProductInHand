@@ -1,5 +1,1 @@
-->Chips
-Lays_10_grams_5
-Balaji_10_grams_10
-->Oil
-Hair Oil_1_litres_100
+1-1-1,5,4,6,7,3;2-2-11,8,10;

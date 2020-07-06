@@ -1,9 +1,6 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
-        $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
-        session_start();
+        
 
         if(isset($_POST['signup'])){
                 $name= $_POST['name'];
@@ -16,10 +13,10 @@
                 #If preg_match = false, then return NULL(1) or else, then return empty string(0)
                     //echo $fname,$mname,$lname,$password,$phone,"\n";
                     //echo preg_match('/[^a-zA-Z0-9\s\-_\.\?\@\']/',$fname)." ".preg_match('/[^a-zA-Z0-9\s\-_\.\?\@\']/',$mname)." ".preg_match('/[^a-zA-Z0-9\s\-_\.\?\@\']/',$lname)." ".preg_match('/[^a-zA-Z0-9\s\-_\.\?\@\']/',$password)."\n";
-                if(preg_match('/[^a-zA-Z\ \]/',$name) || preg_match('/[^a-zA-Z0-9\s\-_\.\?]/',$username) || preg_match('/[^a-zA-Z0-9\s\-_\.\?\@]/',$password)){
+                if(preg_match('/[^a-zA-Z]/',$name) || preg_match('/[^a-zA-Z0-9\s\-_\.\?]/',$username) || preg_match('/[^a-zA-Z0-9\s\-_\.\?\@]/',$password)){
                     ?>
                     <script>
-                        alert("Only letter, number, dash, underscore question mark and periods are allowed.");
+                        alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Only letter, number, dash, underscore question mark and periods are allowed.'; }else{echo 'केवल अक्षर, संख्या, डैश, अंडरस्कोर प्रश्न चिह्न और अवधि सम्मिलित की जा सकती है'; }}else{echo 'Only letter, number, dash, underscore question mark and periods are allowed.';}?>");
                         window.history.back();
                     </script>
                     <?php
@@ -42,7 +39,7 @@
 
                     // Non-NULL Initialization Vector for encryption 
                     $encryption_iv = $phone.'051098';  
-                    echo $encryption_iv;
+                    //echo $encryption_iv;
 
                     // Alternatively, we can use any 16 digit 
                     // characters or numeric for iv 
@@ -94,7 +91,7 @@
                        $token = getToken(10);
                        $_SESSION['Username'] = $username;
                        $_SESSION['token'] = $token;
-                    //echo $_SESSION['Username']." ".$_SESSION['token'];
+                    $_SESSION['Username']." ".$_SESSION['token'];
                         // Update user token 
                         $sql_token = "select token from user_token where Username='".$username."'";
                        $result_token = mysqli_query($con, $sql_token);
@@ -114,7 +111,7 @@
                        }
                    ?>
                     <script>
-                        alert("Created your account Successfully");
+                        alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Created your account Successfully'; }else{echo 'आपका अकाउंट सफलतापूर्वक बनाया गया'; }}else{echo 'Created your account Successfully';}?>");
                         window.history.back();
                     </script>
                     <?php 
@@ -135,7 +132,7 @@
                 if(preg_match('/[^a-zA-Z0-9\s\-_\.\?]/',$user) || preg_match('/[^a-zA-Z0-9\s\-_\.\?\@]/',$pass)){
                     ?>
                     <script>
-                        alert("Only letter, number, dash, underscore question mark and periods are allowed.");
+                        alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Only letter, number, dash, underscore question mark and periods are allowed.'; }else{echo 'केवल अक्षर, संख्या, डैश, अंडरस्कोर प्रश्न चिह्न और अवधि सम्मिलित की जा सकती है'; }}else{echo 'Only letter, number, dash, underscore question mark and periods are allowed.';}?>");
                         window.history.back();
                     </script>
                     <?php
@@ -219,7 +216,7 @@
                     }
                     ?>
                     <script>
-                        alert("Logged In Successfully");
+                        alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Logged In Successfully'; }else{echo 'सफलतापूर्वक लॉग इन हो चुका है'; }}else{echo 'Logged In Successfully';}?>");
                         window.history.back();
                     </script>
                     <?php
@@ -231,7 +228,7 @@
                 {
                 ?>
                 <script>
-                    alert("Match not found");
+                    alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Match not found'; }else{echo 'मैच नहीं मिला'; }}else{echo 'Match not found';}?>");
                     window.history.back();
                 </script>
                 <?php
@@ -239,7 +236,7 @@
             else if($flag!=1){
                 ?>
                 <script>
-                    alert("Match not found");
+                    alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Match not found'; }else{echo 'मैच नहीं मिला'; }}else{echo 'Match not found';}?>");
                 window.history.back();
                 </script>
             <?php

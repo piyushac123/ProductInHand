@@ -1,9 +1,7 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
-echo "0";
-    $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
+//echo "0";
+    
     
     $lid = $_POST['lid'];
 //    $sql = "select lid from List_of_Item where lid=".$lid." AND ratingStatus=1";
@@ -40,7 +38,7 @@ echo "b";
                     $result1 = mysqli_query($con,$sqlUpdate);
                     ?>
                         <script>
-                            alert('Thank you for your visit!');
+                            alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Thank you for your visit!'; }else{echo 'आपके सहयोग के लिए धन्यवाद !'; }}else{echo 'Thank you for your visit!';}?>');
                             location.replace("http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/home.php");
                         </script>
                     <?php
@@ -53,7 +51,7 @@ echo "b";
                     $result1 = mysqli_query($con,$sqlUpdate);
                 ?>
                 <script>
-                    alert('Thank you for your visit!');
+                    alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Thank you for your visit!'; }else{echo 'आपके सहयोग के लिए धन्यवाद !'; }}else{echo 'Thank you for your visit!';}?>');
                     location.replace('http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Customer_History/customer-history.php');
                 </script>
             <?php
@@ -71,7 +69,7 @@ echo "b";
                     $result1 = mysqli_query($con,$sqlUpdate);
                     ?>
                         <script>
-                            alert('Thank you for your visit!');
+                            alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Thank you for your visit!'; }else{echo 'आपके सहयोग के लिए धन्यवाद !'; }}else{echo 'Thank you for your visit!';}?>');
                             location.replace("http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/home.php");
                         </script>
                     <?php

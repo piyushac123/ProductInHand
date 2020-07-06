@@ -1,15 +1,12 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
     
     $lid = $_POST['Lid'];
     
     //echo $lid;
 
-            $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
             
-            $sql = "select sid,rid,Item_name,OTP from List_of_Item where lid=".$lid;
+            $sql = "select sid,rid,Item_info,OTP from List_of_Item where lid=".$lid;
             $result = mysqli_query($con,$sql);
             $value = "";
             $flag = 0;
@@ -18,10 +15,10 @@
                 $flag =1;
                 $sid = $row['sid'];
                 $rid = $row['rid'];
-                $value = $row['Item_name'];
+                $value = $row['Item_info'];
                 $value1 = $row['OTP'];
             }
-            $value = json_decode($value);
+    $value = json_decode($value);
     //echo $value[0]." ".count($value);
     if($flag == 1){
         if(isset($_POST['submitOtp'])){
@@ -34,8 +31,9 @@
                 $iv_length = openssl_cipher_iv_length($ciphering); 
                 $options = 0;
                 
+                $temp=10;
                 // Non-NULL Initialization Vector for encryption
-                    $decryption_iv = $lid.$rid.$sid.'1234567051098';
+                    $decryption_iv = fmod($lid,$temp).fmod($rid,$temp).fmod($sid,$temp).'1234567051098';
                 //echo $decryption_iv."<br>";
 
                 // Store the decryption key 
@@ -50,7 +48,7 @@
                 $result1 = mysqli_query($con,$sqlUpdate);
                 ?>
                 <script>
-                    alert('Transaction completed');
+                    alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Transaction completed'; }else{echo 'लेन-देन पूरा हुआ'; }}else{echo 'Transaction completed';}?>');
                     location.replace('http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shopkeeper_History/shop-history.php');
                 </script>
             <?php
@@ -58,15 +56,19 @@
             else{
                 ?>
                 <script>
-                alert('Incorrect OTP');
+                alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Incorrect OTP'; }else{echo 'गलत OTP'; }}else{echo 'Incorrect OTP';}?>');
                     window.history.back();
                     </script>
                 <?php
             }
         }
         else if(isset($_POST['submit'])){
+            //echo count($value);
             $arrAvailable = array_fill(0,count($value),"0");
             $arrCount = array_fill(0,count($value),"0");
+//            for($i=0;$i<count($arrAvailable);$i++){
+//                echo $arrAvailable[$i]." ".$arrCount[$i]."<br>";
+//            }
 
              //echo count($_POST['check'])." ".count($_POST['count']);
             for($i=0;$i<count($_POST['check']);$i++){
@@ -80,14 +82,14 @@
             $arrive = "'".$_POST['arrive']." mins'";
             $available = json_encode($arrAvailable);
             $count = json_encode($arrCount);
-            echo $available." ".$count;
+            //echo $available." ".$count;
 
             $sqlUpdate="UPDATE `List_of_Item` SET `available_quantity`='".$count."', `availability`='".$available."', `Arrival_span`=".$arrive.", `Status`=1 WHERE lid=".$lid;
             $result1 = mysqli_query($con,$sqlUpdate);
             ?>
                 <script>
-                    alert('Informed Customer');
-                    window.history.go(-2);
+                    alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Informed Customer'; }else{echo 'ग्राहक को सूचित किया'; }}else{echo 'Informed Customer';}?>');
+                    location.replace('http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shopkeeper_History/shop-history.php');
                 </script>
             <?php
         }
@@ -95,7 +97,7 @@
     }
     else{
         ?>
-        <script>alert('Current Entry was Deleted');window.history.go(-2);</script>
+        <script>alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Current Entry was Deleted'; }else{echo 'वर्तमान एंट्री डिलीट कर दी गई'; }}else{echo 'Current Entry was Deleted';}?>');window.history.go(-2);</script>
         <?php
     }
 

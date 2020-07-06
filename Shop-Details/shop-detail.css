@@ -1,4 +1,4 @@
-.add-item1, .add-name1, .remove-item1, .remove-name1{
+.add-item1,.add-sub-item1, .add-name1, .remove-item1, .remove-sub-item1, .remove-name1{
     background-color: #eee;
     border: 2px dashed black;
     border-radius:10px;

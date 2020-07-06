@@ -1,11 +1,4 @@
-<?php
-//    $ip = $_SERVER['SERVER_ADDR']; 
-//echo 'User Real IP Address - '.$ip;
-session_start();
-if(isset($_SESSION['Username'])){
-echo $_SESSION['Username']." ".$_SESSION['token'];
-}
-?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <!DOCTYPE HTML>
 <HTML>
     <HEAD>
@@ -14,7 +7,8 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="home.css">
         <link rel="stylesheet" href="../common/common.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../libraries/3.4.1-bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <style>
             .shop-icon{
@@ -22,7 +16,7 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
                 width: 100px;
                 margin-top:20px;
                 cursor: pointer;
-            }
+            }       
             .motiveSticker{
                 height: 250px;
                 width: 250px;
@@ -88,109 +82,16 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         </script>
 -->
         
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <script src="../libraries/3.5.1-jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="home.js"></script>
         <script src="../common/common.js"></script>
     </HEAD>
     <BODY>
-        <?php
-            $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
-        ?>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/home.php" class="link2">
-                    <img src="../images/bagLogo.jpg" alt="logo" class="logoImg">
-                    <span class="logoText" style="margin-left: -50px;">SACI</span>
-                    </a>
-                </div>
-                <?php
-                        if(isset($_SESSION['Username'])){
-                            $sql = "select rid,Username,City,State from Registration where Username='".$_SESSION['Username']."'";
-                            $result = mysqli_query($con,$sql);
-                            $value = "";$city="";$state="";
-                            while($row = mysqli_fetch_array($result)){
-                                $rid = $row['rid'];
-                                $value = $row['Username'];
-                                $city = $row['City'];
-                                $state = $row['State'];
-                            }
-                            if($_SESSION['Username']!=""){
-                                $sql = "select current_open_status,Activation from Shopkeeper where rid=".$rid;
-                                $result = mysqli_query($con,$sql);
-                                $flagActive=0;
-                                while($row = mysqli_fetch_array($result)){
-                                    $flagActive=1;
-                                    $active = $row['Activation'];
-                                    $switch = $row['current_open_status'];
-                                }
-                                if($flagActive==1){
-                                if($active == 1){
-                                    echo "<div class='col-lg-1 col-md-1 col-sm-1' style='margin-top:40px;'><center><form method='post' action='switch.php'><input type='number' name='rid' value=".$rid." style='display:none;'>";
-                                    if($switch==0){
-                                        echo "<span><button class='shop-icon-btn1' name='btn-off'><img src='../images/switchoff.jpeg' alt='switchoff' style='height:50px;width:50px;cursor:pointer'></button><br><b style='margin-left:-5px;' onclick='switchOn()'>Availability</b></span>";
-                                    }
-                                    else{
-                                        echo "<span><button class='shop-icon-btn1' name='btn-on'><img src='../images/switchon.jpeg' alt='switchoff' style='height:50px;width:50px;cursor:pointer'></button><br><b style='margin-left:-5px;' id=''>Availability</b></span>";
-                                    }
-                                    echo "</form></center></div>";
-                                }
-                                }
-                            }
-                        }
-                    ?>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <ul class="nav nav-pills" style="float: right;z-index: 0;margin-top:50px;">
-    <!--                  <li><a href="../feedback/feedback.html" class="pills-features">FEEDBACK</a></li>-->
-                        <?php
-                            if(isset($_SESSION['Username'])){
-                                $sql = "select token from user_token where Username='".$_SESSION['Username']."'";
-                                $result = mysqli_query($con,$sql);
-                                $token = "";
-                                while($row = mysqli_fetch_array($result)) {
-                                   $token = $row['token'];
-                                }
-                                //echo $token;
-                                if($_SESSION['token'] != $token){
-                                    //echo "a";
-                                ?>
-                                <li id="sec4" class="sec4"><a href="#register-box" class="login-window">Signup</a></li>
-                                <li id="sec5" class="sec5"><a href="#login-box" class="login-window">Login</a></li>
-                                <?php
-                            }
-                            else{//echo "b";
-                                ?>
-                            <form method="post" action="logout.php">
-
-                                <button name="but_logout" id="sec6" class="sec6"><acronym title="SIGN OUT">
-                                <?php
-                                echo $value;
-                                ?>
-                                </acronym></button>
-                            </form>
-                                <?php
-                            }
-                        
-                    }
-                        else{//echo "c";
-                            ?>
-                                <li id="sec4" class="sec4"><a href="#register-box" class="login-window">Signup</a></li>
-                                <li id="sec5" class="sec5"><a href="#login-box" class="login-window">Login</a></li>
-                            <?php
-                        }
-                            
-                        ?>
-                        <li><a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/Shop-list/Item-list/display-item-list-status.php" class="link2">
-                            <img src="../images/cart-clipart2.png" alt="cart" style="width:50px;height:50px;margin-top:-5px;cursor:pointer">CART
-                            </a></li>
-                  </ul>
-                </div>
-            </div>
-        </div>
+        <?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/headerHome.php');
+        
+        //echo $_SERVER['DOCUMENT_ROOT'].'/ProductInHand/header.php';?>
         <script>
 
 //            function showResult(str) {
@@ -225,8 +126,12 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
                     <h2 style="font-family:'Aclonica';margin-bottom:30px;color:white"><i>We are here to enrich shopping style</i></h2>
                     <div class="autocomplete">
                         
-                        <?php $City="";if($city!=NULL && $state!=NULL){$City = $city.", ".$state;}?>
-                        <input type="text" name="location" style="size:30px" placeholder="Search City" class="search-bar controls" id="myInput" value="<?php if($City==", "){echo "";}else{echo $City;}?>" required>
+                        <?php 
+                        $City=NULL;
+                        if(isset($_SESSION['Username']) && $_SESSION['token']==$token){
+                            if($city!=NULL && $state!=NULL){$City = $city.", ".$state;}
+                        }?>
+                        <input type="text" name="location" style="size:30px" placeholder="<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Search City'; }else{echo 'शहर खोजो'; }}else{echo 'Search City';}?>" class="search-bar controls" id="myInput" value="<?php if($City==NULL){echo "";}else{echo $City;}?>" required>
                     </div>
                         <?php
                             $sql = "select City,State from Shopkeeper";
@@ -281,7 +186,9 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-sm-0"></div>
-                <div class="col-lg-4 col-sm-12" style="font-family:'Aclonica';text-align:center;"><h2>Our Motivation</h2></div>
+                <div class="col-lg-4 col-sm-12" style="font-family:'Aclonica';text-align:center;"><h2>
+                     <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Our Motivation'; }else{echo 'हमारी प्रेरणा'; }}else{echo 'Our Motivation';}?>
+                </h2></div>
             </div>
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6"><img src="../images/motivation1.png" alt="motivation1" class="motiveSticker"></div>
@@ -293,14 +200,29 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="row" style="font-family:'Aclonica';text-align:center;">
-                    <div class="col-lg-4"><h3><b>Enthusiastic service providers create enthusiastic customers</b></h3><b style="margin-top:50px;">Select as per your choice...</b></div>
+                    <div class="col-lg-4"><h3><b>Enthusiastic service providers create enthusiastic customers</b></h3>
+                        <b style="margin-top:50px;">
+                            <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Select as per your choice..."; }else{echo "अपनी पसंद के अनुसार चुनें ..."; }}else{echo "Select as per your choice...";}?>
+                        </b></div>
                     <div class="col-lg-4 col-lg-6 col-sm-6">
-                        <button type="submit" name="grocery" class="shop-icon-btn" value="grocery and essentials"><img src="../images/grocery3.png" alt="grocery" class="shop-icon"></button><br><b>Grocery and Essentials</b><br>
-                        <button type="submit" name="medicine" class="shop-icon-btn" value="medicines"><img src="../images/medicine-clipart.png" alt="medicine" class="shop-icon"></button><br><b>Medicines</b>
+                        <button type="submit" name="grocery" class="shop-icon-btn" value="grocery and essentials"><img src="../images/grocery3.png" alt="grocery" class="shop-icon"></button><br>
+                        <b>
+                            <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Grocery and Essentials"; }else{echo "किराने और आवश्यक वस्तुएं"; }}else{echo "Grocery and Essentials";}?>
+                        </b><br>
+                        <button type="submit" name="medicine" class="shop-icon-btn" value="medicines"><img src="../images/medicine-clipart.png" alt="medicine" class="shop-icon"></button><br>
+                        <b>
+                            <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Medicines"; }else{echo "दवाइयाँ"; }}else{echo "Medicines";}?>
+                        </b>
                     </div>
                     <div class="col-lg-4 col-lg-6 col-sm-6">
-                        <button type="submit" name="book" class="shop-icon-btn" value="books and stationary"><img src="../images/book-clipart2.png" alt="book" class="shop-icon"></button><br><b>Books and Stationary</b><br>
-                        <button type="submit" name="gift" class="shop-icon-btn" value="gifts and lifestyle"><img src="../images/gift-clipart2.png" alt="gift" class="shop-icon"></button><br><b>Gifts and Lifestyle</b>
+                        <button type="submit" name="book" class="shop-icon-btn" value="books and stationary"><img src="../images/book-clipart2.png" alt="book" class="shop-icon"></button><br>
+                        <b>
+                            <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Books and Stationary"; }else{echo "पुस्तकें और स्टेशनरी"; }}else{echo "Books and Stationary";}?>
+                        </b><br>
+                        <button type="submit" name="gift" class="shop-icon-btn" value="gifts and lifestyle"><img src="../images/gift-clipart2.png" alt="gift" class="shop-icon"></button><br>
+                        <b>
+                            <?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Gifts and Lifestyle"; }else{echo "उपहार और जीवन शैली"; }}else{echo "Gifts and Lifestyle";}?>
+                        </b>
                     </div>
                 </div>
             </div>
@@ -308,7 +230,9 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-sm-0"></div>
-                <div class="col-lg-5 col-sm-12" style="font-family:'Aclonica';text-align:center;"><h2>Take a look at our features</h2></div>
+                <div class="col-lg-5 col-sm-12" style="font-family:'Aclonica';text-align:center;">
+                    <h2><?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=="English"){echo "Take a look at our features"; }else{echo "हमारी सुविधाओं पर एक नज़र डालें"; }}else{echo "Take a look at our features";}?></h2>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-3"></div>
@@ -361,83 +285,7 @@ echo $_SESSION['Username']." ".$_SESSION['token'];
         </div>
         </form>
         
-        <div class="jumbotron jumbotron-fluid" style="margin-top:50px;">
-            <div class="container">
-                <div class="row">
-                    <span class="logoText">SACI</span>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3" style="font-size:20px;margin-top:20px;">
-                        <b>Company</b>
-                        <ul class="footer-text">
-                            <li>About</li>
-                            <li>Blogs</li>
-                            <li>Partners</li>
-                            <li>Suggestion</li>
-                            <li>Contact</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-3" style="font-size:20px;margin-top:20px;">
-                        <b>For Shopkeeper</b>
-                        <ul class="footer-text">
-                            <li><a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shop-Details/shop-detail.php" class="link2">Add shop details</a></li>
-                            <li><a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shopkeeper_History/shop-history.php" class="link2">Order History</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-3" style="font-size:20px;margin-top:20px;">
-                        <b>For you</b>
-                        <ul class="footer-text">
-                            <li><a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Customer_History/customer-history.php" class="link2">Transaction History</a></li>
-                            <li>Privacy</li>
-                            <li>Terms</li>
-                            <li>Security</li>
-                            <li>Help and Support</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-3" style="font-size:20px;margin-top:20px;">
-                        <b>Social Links</b><br>
-                            <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a>
-                              <a href="https://twitter.com/login?lang=en"><i class="fa fa-twitter"></i></a>
-                              <a href="https://plus.google.com/discover"><i class="fa fa-google"></i></a>
-                              <a href="https://in.linkedin.com/"><i class="fa fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-        <!--Start For Login-->   
-        <div id="login-box" class="login-popup">
-            <a href="#" class="close"><i style="font-size:24px" class="fa btn_close">&#xf00d;</i></a>
-            <h3 class="titlelog">Login Page</h3>
-            <form method="post" class="signin" action="login.php">
-                <fieldset>
-                    <span><input type="text" name="username" class="input1" placeholder="Enter username"></span>
-                    <span><input type="password" name="password" class="input1" placeholder="Enter password"></span><br>
-                    <input type="reset" value="RESET" class="button1">
-                    <input type="submit" value="SUBMIT" name="signin" class="button1"><br>
-                <a class="forgot" href="forgotPassword.php">Forgot your password?</a>
-                </fieldset>
-            </form>
-        </div>
-        <!--End For SignUp-->
-                <!--Start For Login-->   
-        <div id="register-box" class="login-popup">
-            <a href="#" class="close"><i style="font-size:24px" class="fa btn_close">&#xf00d;</i></a>
-            <h3 class="titlelog">Create New Account</h3>
-            <form method="post" class="signin" action="login.php">
-                <fieldset>
-                    <input type="text" placeholder="Enter Full Name" class="input1" name="name">
-                    <input type="number" placeholder="Enter Phone number" class="input1" name="phone">
-                    <input type="text" placeholder="Enter Username" class="input1" name="username">
-                    <input type="password" placeholder="Enter Password" class="input1" name="password">
-                    <input type="password" placeholder="Re-enter Password" class="input1" name="rpassword">
-                    <input type="reset" value="RESET">
-                    <input type="submit" value="SUBMIT" name="signup">
-                </fieldset>
-            </form>
-        </div>
-        <!--End For SignUp-->
+        <?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/footer.php');?>
+        <?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/register.php');?>
     </BODY>
 </HTML>

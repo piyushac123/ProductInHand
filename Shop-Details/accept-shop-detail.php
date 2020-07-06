@@ -1,48 +1,14 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
 
 if(isset($_POST['submitShop'])){
-    
-    
-
-    $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
-    $sql = "select rid,Username from Registration where Flag=1";
+    $sql = "select rid,Username from Registration where Username='".$_SESSION['Username']."'";
     $result = mysqli_query($con,$sql);
 
     while($row = mysqli_fetch_array($result)){
         $rid = $row['rid'];
         $username = $row['Username']; 
     }
-    
-    $arr = array();
-    $sql1 = "select rid from Shopkeeper";
-    $result1 = mysqli_query($con,$sql1);
-
-    while($row1 = mysqli_fetch_array($result1)){
-        $r = $row1['rid'];
-        array_push($arr,$r);
-    }
-    
-    $cntRow=0;
-    for($i=0;$i<count($arr);$i++){
-        if($rid==$arr[$i]){
-            $cntRow++;
-        }
-    }
-    //echo $rid.$cntRow.count($arr)."--------------<br>";
-    if($cntRow!=0){
-        ?>
-        <script>
-            alert('Already Registered Shopkeeper');
-            window.history.back();
-        </script>
-        <?php
-    }
-    
-
-//    echo $username." ".$rid;
     $photo="";
     $certificate="";
 
@@ -67,19 +33,19 @@ if(isset($_POST['submitShop'])){
       }
       
     //echo $username." ".$rid;
-    $dir = "photo/".$username."_".$rid;
+    $dir = "photo/".$rid;
         //echo $dir;
       if(empty($errors)==true){
           if( is_dir($dir) === false )
             {
                 mkdir($dir);
             }
-         move_uploaded_file($file_tmp,$dir."/".$file_name);
+         move_uploaded_file($file_tmp,$dir."/photo1.".$file_ext);
          //echo "Success";
       }else{
          print_r($errors);
       }
-        $photo = "'".$dir."/".$file_name."'";
+        $photo = "'".$dir."/photo1.".$file_ext."'";
    }
     
 
@@ -104,29 +70,21 @@ if(isset($_POST['submitShop'])){
       }
       
         //echo $username." ".$rid;
-        $dir = "certificate/".$username."_".$rid;
+        $dir = "certificate/".$rid;
       if(empty($errors)==true){
           if( is_dir($dir) === false )
             {
                 mkdir($dir);
             }
-         move_uploaded_file($file_tmp,$dir."/".$file_name);
+         move_uploaded_file($file_tmp,$dir."/certificate1.".$file_ext);
          //echo "Success";
       }else{
          print_r($errors);
       }
-        $certificate = "'".$dir."/".$file_name."'";
+        $certificate = "'".$dir."/certificate1.".$file_ext."'";
    }
     
-    $section_item = "";
-    $cnt = count($_POST['section']);
-    for($i=0;$i<$cnt;$i++){
-        $section_item .= "->".$_POST['section'][$i]."\n";
-        for($j=0;$j<count($_POST['name-'.($i+1)]);$j++){
-            $section_item .= $_POST['name-'.($i+1)][$j]."_".$_POST['weight-'.($i+1)][$j]."_".$_POST['unit-'.($i+1)][$j]."_".$_POST['price-'.($i+1)][$j]."\n";
-        }
-    }
-    //echo "-<br>".$section_item."<br>-";
+
     
     
     $name="'".$_POST['name']."'";
@@ -173,29 +131,53 @@ if(isset($_POST['submitShop'])){
     //echo $payment."<br>";
     $payment="'".$payment."'";
     
-    $sqlInsert="INSERT INTO Shopkeeper (`rid`,`Shop_name`, `Shop_type`,`Shop_photo`,`Shop_certificate`,`opening_time`,`closing_time`,`open_days`, `current_open_status`,`mode_of_payments`,`Address`,`Area`,`Landmark`,`City`,`State`,`Country`,`Pincode`) VALUES ($rid,$name,$business,$photo,$certificate,$otime,$ctime,$day,0,$payment,$address1,$address2,$landmark,$city,$state,$country,$pincode)";
+
+    
+    
+    $arr = array();
+    $sql1 = "select rid from Shopkeeper";
+    $result1 = mysqli_query($con,$sql1);
+
+    while($row1 = mysqli_fetch_array($result1)){
+        $r = $row1['rid'];
+        array_push($arr,$r);
+    }
+    
+    $cntRow=0;
+    for($i=0;$i<count($arr);$i++){
+        if($rid==$arr[$i]){
+            $cntRow++;
+        }
+    }
+    //echo $rid.$cntRow.count($arr)."--------------<br>";
+    if($cntRow!=0){
+        $sqlUpdate="UPDATE `Shopkeeper` SET `Shop_name`=".$name.",`Shop_type`=".$business.",`Email`=".$email.",`opening_time`=".$otime.",`closing_time`=".$ctime.",`open_days`=".$day.",`mode_of_payments`=".$payment.",`Address`=".$address1.",`Area`=".$address2.",`Landmark`=".$landmark.",`City`=".$city.",`State`=".$state.", `Country`=".$country.",`Pincode`=".$pincode." WHERE rid=".$rid;
+            $result1 = mysqli_query($con,$sqlUpdate);
+        ?>
+        <script>
+            alert('<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Already Registered Shopkeeper! Updated Information.'; }else{echo 'पहले से ही पंजीकृत दुकानदार!  विवरण अपडेट की गई'; }}else{echo 'Already Registered Shopkeeper! Updated Information.';}?>');
+            location.replace("http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shop-Details/shop-item-list.php");
+        </script>
+        <?php
+    }
+    
+
+//    echo $username." ".$rid;
+    
+    else{
+    $sqlInsert="INSERT INTO Shopkeeper (`rid`,`Shop_name`, `Shop_type`,`Shop_photo`,`Shop_certificate`,`Email`,`opening_time`,`closing_time`,`open_days`, `current_open_status`,`mode_of_payments`,`Address`,`Area`,`Landmark`,`City`,`State`,`Country`,`Pincode`) VALUES ($rid,$name,$business,$photo,$certificate,$email,$otime,$ctime,$day,0,$payment,$address1,$address2,$landmark,$city,$state,$country,$pincode)";
 
                 if ($con->query($sqlInsert) === FALSE) {
                     echo "Error: " . $sql . "<br>" . $con->error;
                 }else{
-                    $sqlFile="select sid from Shopkeeper where rid=".$rid;
-                    $resultFile = mysqli_query($con,$sqlFile);
-                    
-                    while($row = mysqli_fetch_array($resultFile)){
-                        $sid=$row['sid'];
-                    }
-                    
-                    $file_path = "Item-list/".$_POST['business']."/".$sid."_".$rid.".txt";
-                    echo $file_path;
-                    file_put_contents($file_path, $section_item);
                    ?>
                     <script>
-                        alert("Successfully Registered as a Shopkeeper.");
-                        window.history.back();
+                        alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Successfully Registered as a Shopkeeper.'; }else{echo 'एक दुकानदार के रूप में सफलतापूर्वक पंजीकृत'; }}else{echo 'Successfully Registered as a Shopkeeper.';}?>");
+                        location.replace("http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Shop-Details/shop-item-list.php");
                     </script>
                     <?php 
                 }
-
+    }
 //    echo $cnt;
 //    echo $name,$email,$business,$day,$otime1.$otime2.$ctime1.$ctime2.$am1.$am2.$address1.$address2,$city,$landmark,$state,$country,$pincode,$payment;
 }

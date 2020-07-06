@@ -1,15 +1,12 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <?php
-    $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
-session_start();
+    
 //echo $_SESSION['Username'];
     if(isset($_POST['but_logout'])){
         session_destroy();
 ?>
 <script>
-    alert("Logged Out Successfully");
+    alert("<?php if(isset($_SESSION['Language'])){if($_SESSION['Language']=='English'){echo 'Logged Out Successfully'; }else{echo 'सफलतापूर्वक लॉग आउट किया गया'; }}else{echo 'Logged Out Successfully';}?>");
     location.replace('http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/home.php');
 </script>
 <?php

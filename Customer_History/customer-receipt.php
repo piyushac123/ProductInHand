@@ -1,3 +1,4 @@
+<?php include($_SERVER['DOCUMENT_ROOT'].'/ProductInHand/connect.php');?>
 <!DOCTYPE HTML>
 <HTML>
     <HEAD>
@@ -6,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="customer-history.css">
         <link rel="stylesheet" href="../common/common.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../libraries/3.4.1-bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <style>
             
@@ -61,7 +62,7 @@
             }
         </script>
 -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="../libraries/3.5.1-jquery.min.js"></script>
         <script>
             $(document).ready(function(){
                 $('#app1').click(function(){
@@ -148,10 +149,6 @@
                     $lid = $_POST['row_num'][$i];
                 }
             }
-            $con = mysqli_connect('localhost','root','','Product.inhand');
-            if (!$con) {
-                die('Could not connect: ' . mysqli_error($con));
-            }
         
         
             $sql = "select * from List_of_Item where lid=".$lid;
@@ -163,13 +160,13 @@
             while($row = mysqli_fetch_array($result)){
                 $flagList = 1;
                $arrList1 = array();
-                array_push($arrList1,$row['lid']);array_push($arrList1,$row['rid']);array_push($arrList1,$row['sid']);array_push($arrList1,$row['Item_name']);array_push($arrList1,$row['Item_price']);array_push($arrList1,$row['Item_size']);array_push($arrList1,$row['Item_quantity']);array_push($arrList1,$row['acceptance']);array_push($arrList1,$row['Status']);array_push($arrList1,$row['Total']);array_push($arrList1,$row['DATE']);array_push($arrList1,$row['TIME']);array_push($arrList1,$row['completion']);array_push($arrList1,$row['available_quantity']);array_push($arrList1,$row['ratingStatus']);
+                array_push($arrList1,$row['lid']);array_push($arrList1,$row['rid']);array_push($arrList1,$row['sid']);array_push($arrList1,$row['Item_info']);array_push($arrList1,$row['Item_quantity']);array_push($arrList1,$row['acceptance']);array_push($arrList1,$row['Status']);array_push($arrList1,$row['Total']);array_push($arrList1,$row['DATE']);array_push($arrList1,$row['TIME']);array_push($arrList1,$row['completion']);array_push($arrList1,$row['available_quantity']);array_push($arrList1,$row['ratingStatus']);
                 
                 array_push($arrList,$arrList1);
             }
             
         //echo $arrList[0][12].$arrList[0][13];
-        if($arrList[0][12]==1){
+        if($arrList[0][10]==1){
         
             $arrFrom = array();
             $arrShop = array();
@@ -184,15 +181,33 @@
                     array_push($arrFrom1,$row['Name']);array_push($arrFrom1,$row['Username']);array_push($arrFrom1,$row['Phone_number']);
                 }
                 array_push($arrFrom,$arrFrom1);
-
+                
+                $table = '';
+                        if(isset($_SESSION['Language'])){
+                                if($_SESSION['Language']=='English'){
+                                        $table.='Shopkeeper';
+                                }else{
+                                 $table.='HShopkeeper';
+                                    }
+                                    }
+                                    else{
+                                        $table.='Shopkeeper';
+                                    }
+                
                 $arrShop1= array();
-                $sql = "select * from Shopkeeper where sid=".$arrList[$i][2];
+                $sql = "select rid from Shopkeeper where sid=".$arrList[$i][2];
+                $result = mysqli_query($con,$sql);
+                $row1 = mysqli_fetch_array($result);
+                $ridTemp = $row1['rid'];
+                
+                $sql = "select * from ".$table." where rid=".$ridTemp;
                 $result = mysqli_query($con,$sql);
                 $value = "";
-
+                
+                
 
                 while($row = mysqli_fetch_array($result)){
-                    array_push($arrShop1,$row['Address']);array_push($arrShop1,$row['Area']);array_push($arrShop1,$row['Landmark']);array_push($arrShop1,$row['City']);array_push($arrShop1,$row['State']);array_push($arrShop1,$row['Country']);array_push($arrShop1,$row['Pincode']);
+                    array_push($arrShop1,$row['Address']);array_push($arrShop1,$row['Area']);array_push($arrShop1,$row['Landmark']);array_push($arrShop1,$row['City']);array_push($arrShop1,$row['State']);array_push($arrShop1,$row['Country']);array_push($arrShop1,$row['Pincode']);array_push($arrShop1,$row['Shop_name']);
                 }
                 array_push($arrShop,$arrShop1);
             }
@@ -212,9 +227,9 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-7 col-md-7 col-sm-7">
-                    <a href="http://<?php echo $_SERVER['SERVER_ADDR'];?>/ProductInHand/Home/home.php" class="link2">
+                    <a href="../Home/home.php" class="link2">
                     <img src="../images/bagLogo.jpg" alt="logo" class="logoImg">
-                    <span class="logoText" style="margin-left: -50px;">SACI</span>
+                    <span class="logoText margin1">Product.InHand</span>
                     </a>
                 </div>
             </div>
@@ -222,52 +237,112 @@
         <div class="container">
                 <div class="row">
                     <div class="col-lg-3"></div>
-                    <div class="col-lg-6"><h1 style="font-family: 'Aclonica';font-weight:bold;text-align:center">Transaction Receipt</h1></div>
+                    <div class="col-lg-6"><h1 style="font-family: 'Aclonica';font-weight:bold;text-align:center">
+                        
+                        <?php
+            $flagLang=0;
+                        if(isset($_SESSION['Language'])){
+                                if($_SESSION['Language']=='English'){
+                                        echo 'Transaction Receipt';
+                                }else{
+                                 echo 'व्यवहार रसीद';
+                                 $flagLang=1;
+                                    }
+                                    }
+                                    else{
+                                        echo 'Transaction Receipt';
+                                    }
+                    ?>
+                    </h1></div>
                 </div>
-                <div class="row" style="text-align:center;">
+                <div class="row">
                     <div class="col-lg-6">
                         <h4>
-                            <div class="hist-Text"><b>Shopkeeper : </b><?php echo $arrFrom[0][1];?></div>
-                            <div class="hist-Text"><b>Status :</b>
+                            <div class="hist-Text"><b><?php if($flagLang){echo 'दुकान';}else{echo 'Shop';}?> : </b><?php echo $arrShop[0][7];?></div>
+                            <div class="hist-Text"><b><?php if($flagLang){echo 'स्थिति';}else{echo 'Status';}?> : </b>
                                 <?php 
-                                    if($arrList[0][7] == 0 && $arrList[0][8] == 0){
-                                        echo "<span style='color:red;'>Transaction started</span>";
+                                    if($arrList[0][5] == 0 && $arrList[0][6] == 0){
+                                        echo "<span style='color:red;'>";
+                                        if($flagLang){echo 'व्यवहार शुरू हुआ';}else{echo 'Transaction started';}
+                                        echo "</span>";
                                     }
-                                    else if($arrList[0][7] == 0 && $arrList[0][8] == 1){
-                                        echo "<span style='color:blue;'>Waiting for Acceptance</span>";
+                                    else if($arrList[0][5] == 0 && $arrList[0][6] == 1){
+                                        echo "<span style='color:blue;'>";
+                                        if($flagLang){echo 'स्वीकृति की प्रतीक्षा है';}else{echo 'Waiting for Acceptance';}
+                                        echo "</span>";
                                     }
-                                    else if($arrList[0][7] == 1 && $arrList[0][12] == 0){
-                                        echo "<span style='color:#9400d3;'>Order confirmed</span>";
+                                    else if($arrList[0][5] == 1 && $arrList[0][10] == 0){
+                                         echo "<span style='color:#9400d3;'>";
+                                        if($flagLang){echo 'ऑर्डर की पुष्टि की गई';}else{echo 'Order confirmed';}
+                                        echo "</span>";
                                     }
-                                    else if($arrList[0][12] == 1){
-                                        echo "<span style='color:green;'>Transaction completed</span>";
+                                    else if($arrList[0][10] == 1){
+                                        echo "<span style='color:green;'>";
+                                        if($flagLang){echo 'व्यवहार पूरा हुआ';}else{echo 'Transaction completed';}
+                                        echo "</span>";
                                     }
                                 ?>
                             </div>
-                            <div class="hist-Text"><b>Phone number : </b><?php echo $arrFrom[0][2];?></div>
+                            <div class="hist-Text"><b><?php if($flagLang){echo 'फ़ोन नंबर';}else{echo 'Phone number';}?> : </b><?php echo $arrFrom[0][2];?></div>
                         </h4>
                     </div>
                     <div class="col-lg-6">
-                        <h4><div class="hist-Text"><b>Transaction date : </b><?php echo $arrList[0][10];?></div><div class="hist-Text"><b>Transaction time : </b><?php echo $arrList[0][11];?></div></h4>
+                        <h4><div class="hist-Text"><b><?php if($flagLang){echo 'व्यवहार की तारीख';}else{echo 'Transaction date';}?> : </b><?php echo $arrList[0][8];?></div><div class="hist-Text"><b><?php if($flagLang){echo 'व्यवहार का समय';}else{echo 'Transaction time';}?> : </b><?php echo $arrList[0][9];?></div></h4>
                     </div>
                 </div>
-                <div class="row" style="text-align:center;">
-                    <h4><div class="hist-Text"><b>Address : </b><?php echo $arrShop[0][0].", ".$arrShop[0][1].", near ".$arrShop[0][2].", ".$arrShop[0][3].", ".$arrShop[0][4].", ".$arrShop[0][5]."</div><div class='hist-Text' style='text-align:left;margin-left:70px;'><b>Pincode : </b>".$arrShop[0][6];?></div></h4>
+                <div class="row">
+                    <h4><div class="hist-Text"><b>Address : </b><?php echo $arrShop[0][0].", ".$arrShop[0][1].", near ".$arrShop[0][2].", ".$arrShop[0][3].", ".$arrShop[0][4].", ".$arrShop[0][5]."</div><div class='hist-Text'><b>Pincode : </b>".$arrShop[0][6];?></div></h4>
                 </div>
                 
                     <?php
-                        $arrName = json_decode($arrList[0][3]);
-                        $arrPrice = json_decode($arrList[0][4]);
-                        $arrWeight = json_decode($arrList[0][5]);
-                        $arrCount = json_decode($arrList[0][6]);
+            if($flagLang){$name="नाम";$weight="वजन";$quantity="मात्रा";$price="कीमत";$total="टोटल";}
+            else{$name="Name";$weight="Weight";$quantity="Quantity";$price="Price";$total="Total";}
+                    $arrName = array();
+                    $arrPrice = array();
+                    $arrWeight = array();
+                        $arrCount = json_decode($arrList[0][4]);
                     //echo $arrList[0][14].$arrList[0][13].$arrList[0][12];
-                        $arravail_quant = json_decode($arrList[0][13]);
-                        $arrTotal = $arrList[0][9];
+                        $arravail_quant = json_decode($arrList[0][11]);
+                        $arrTotal = $arrList[0][7];
+                        $arrItem = json_decode($arrList[0][3]);
+                $arrCommodity = array();
+                for($i=0;$i<count($arrItem);$i++){
+                    $temp = 0;
+                    foreach(explode("-",$arrItem[$i]) as $rec){
+                        //echo strpos($rec,"->");
+                        $temp = $rec; 
+                    }
+                    array_push($arrCommodity,$temp);
+                }
+//                for($i=0;$i<count($arrCommodity);$i++){
+//                    echo $arrCommodity[$i]." ";
+//                }
+            $cid = '';
+                for($i=0;$i<count($arrCommodity);$i++){
+                    
+                    $sql1 = "select * from Commodity where commodity_id =".$arrCommodity[$i];
+                            $result1 = mysqli_query($con,$sql1);
+                            while($row1 = mysqli_fetch_array($result1)){
+                                if($flagLang){
+                                    array_push($arrName,$row1['hcommodity_name']);
+                                    }
+                                    else{
+                                        array_push($arrName,$row1['commodity_name']);
+                                    }
+                                
+                                array_push($arrWeight,$row1['commodity_size']);
+                                array_push($arrPrice,$row1['commodity_price']);
+                            }
+                }
+                
+                        
+            
+            
                     ?>
                     <div class="row">
                         <?php
                             $newarrTotal = 0;
-                            echo "<table class='table table-striped' style='margin-top:20px;'><tr><th>Name</th><th>Size</th><th>Quantity</th><th>Price</th></tr>";
+                            echo "<table class='table table-striped' style='margin-top:20px;'><tr><th>".$name."</th><th>".$weight."</th><th>".$quantity."</th><th>".$price."</th></tr>";
                         for($i=0;$i<count($arrName);$i++){
                             echo "<tr><td>".$arrName[$i]."</td>";
                             $arr = array();
@@ -278,23 +353,25 @@
                             echo "<td>".$arravail_quant[$i]."</td><td>Rs. ".$arrPrice[$i]."</td></tr>";
                             $newarrTotal += ($arravail_quant[$i]*$arrPrice[$i]);
                         }
-                    echo "<tr><th>Total</th><th></th><th></th><th>Rs. ".$newarrTotal."</th></tr></table>";
+                    echo "<tr><th>".$total."</th><th></th><th></th><th>Rs. ".$newarrTotal."</th></tr></table>";
                         ?>
                         </div>
             </div>
         <?php 
-            if($arrList[0][14]==1){
+            if($arrList[0][12]==1){
                 ?>
                 <form method="post" action="../Rating/accept-rating.php">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3"></div>
-                <div class="col-lg-6"><h1 style="font-family: 'Aclonica';font-weight:bold;text-align:center;">Rate your Experience!</h1></div>
+                <div class="col-lg-6"><h1 style="font-family: 'Aclonica';font-weight:bold;text-align:center;">
+                    <?php if($flagLang){echo "अपने अनुभव को रेट करें!";}else{echo "Rate your Experience";}?>
+                    </h1></div>
             </div>
             <div class="row" style="margin-top:20px;">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6" style="text-align:center;">
-                    <h2 style="font-family: 'Aclonica';font-weight:bold;">Rate our Application</h2>
+                    <h2 style="font-family: 'Aclonica';font-weight:bold;"><?php if($flagLang){echo "हमारे एप्लीकेशन को रेट करें";}else{echo "Rate our Application";}?></h2>
                     <div style="margin-top:20px;">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="app1">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="app2">
@@ -303,13 +380,13 @@
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="app5">
                         <input type="number" name="appStar" id="appStar" style="display: none;">
                     </div>
-                    <div style="margin-top:20px;"><input type="text" name="app" placeholder="Any suggestion" class="inputComment" maxlength="200"></div>
+                    <div style="margin-top:20px;"><input type="text" name="app" placeholder="<?php if($flagLang){echo 'कोई सुझाव';}else{echo 'Any suggestion';}?>" class="inputComment" maxlength="200"></div>
                 </div>
             </div>
             <div class="row" style="margin-top:20px;">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6" style="text-align:center;">
-                    <h2 style="font-family: 'Aclonica';font-weight:bold;">Rate Shopkeeper Service</h2>
+                    <h2 style="font-family: 'Aclonica';font-weight:bold;"><?php if($flagLang){echo "दुकानदार की सेवा को रेट करें";}else{echo "Rate Shopkeeper Service";}?></h2>
                     <div style="margin-top:20px;">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="shopkeeper1">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="shopkeeper2">
@@ -318,13 +395,13 @@
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="shopkeeper5">
                         <input type="number" name="shopkeeperStar" id="shopkeeperStar" style="display: none;">
                     </div>
-                    <div style="margin-top:20px;"><input name="shopkeeper" type="text" placeholder="Any suggestion" class="inputComment" maxlength="200"></div>
+                    <div style="margin-top:20px;"><input name="shopkeeper" type="text" placeholder="<?php if($flagLang){echo 'कोई सुझाव';}else{echo 'Any suggestion';}?>" class="inputComment" maxlength="200"></div>
                 </div>
             </div>
             <div class="row" style="margin-top:20px;">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6" style="text-align:center;">
-                    <h2 style="font-family: 'Aclonica';font-weight:bold;">Rate Product Quality</h2>
+                    <h2 style="font-family: 'Aclonica';font-weight:bold;"><?php if($flagLang){echo 'उत्पाद की गुणवत्ता को रेट करें';}else{echo 'Rate Product Quality';}?></h2>
                     <div style="margin-top:20px;">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="product1">
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="product2">
@@ -333,13 +410,13 @@
                         <img src='../images/emptyStar-clipart.png' alt='empty' class='star' id="product5">
                         <input type="number" name="productStar" id="productStar" style="display: none;">
                     </div>
-                    <div style="margin-top:20px;"><input name="product" type="text" placeholder="Any suggestion" class="inputComment" maxlength="200"></div>
+                    <div style="margin-top:20px;"><input name="product" type="text" placeholder="<?php if($flagLang){echo 'कोई सुझाव';}else{echo 'Any suggestion';}?>" class="inputComment" maxlength="200"></div>
                 </div>
             </div>
             <div class="row" style="margin-top:20px;">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6" style="text-align:center;">
-                    <input type="submit" name="submitReview" value="SUBMIT">
+                    <input type="submit" name="submitReview" value="<?php if($flagLang){echo 'सबमिट';}else{echo 'SUBMIT';}?>">
                 </div>
                 
             </div>
@@ -357,14 +434,18 @@
             }
             echo "<div class='container'>";
             for($i=0;$i<count($arrReview);$i+=2){
-                if($i==0)$temp = "Application";
-                else if($i==2)$temp = "Shopkeeper";
-                else if($i==4)$temp = "Product Quality";
+                if($i==0){if($flagLang){$temp = "एप्लीकेशन";}else{$temp = "Application";}}
+                else if($i==2){if($flagLang){$temp = "दुकानदार";}else{$temp = "Shopkeeper";}}
+                else if($i==4){if($flagLang){$temp = "उत्पाद की गुणवत्ता";}else{$temp = "Product Quality";}}
                 $star = "";
                 $reverse = "";
                 for($j=0;$j<$arrReview[$i];$j++){$star.="<img src='../images/fillStar-clipart.jpg' alt='fill-star' class='star'>";}
                 for($j=0;$j<(5-$arrReview[$i]);$j++){$reverse.="<img src='../images/emptyStar-clipart.png' alt='empty-star' class='star'>";}
-                echo "<div class='row'><h3 class='new-text'>".$temp." Review</h3></div><div class='row'><div class='col-lg-6'>".$star.$reverse."</div><div class='col-lg-6' style='margin-top:10px;'><b>Comment : </b>".$arrReview[$i+1]."</div></div>";
+                echo "<div class='row'><h3 class='new-text'>".$temp." ";
+                if($flagLang){echo "रेटिंग";}else{echo "Review";}
+                echo "</h3></div><div class='row'><div class='col-lg-6'>".$star.$reverse."</div><div class='col-lg-6' style='margin-top:10px;'><b>";
+                if($flagLang){echo "टिप्पणी";}else{echo "Comment";}
+                echo " : </b>".$arrReview[$i+1]."</div></div>";
             }
             echo "</div>";
         }
